@@ -6,18 +6,18 @@
     - name: Update the package index
       shell: |
         #!/bin/bash
-        apt-get update -y
+        sudo apt-get update -y
 
     - name: Install Apache
       shell: |
         #!/bin/bash
-        apt-get install apache2 -y
+        sudo apt-get install apache2 -y
 
     - name: Ensure Apache is enabled and running
       shell: |
         #!/bin/bash
-        systemctl enable apache2
-        systemctl start apache2
+        sudo systemctl enable apache2
+        sudo systemctl start apache2
 
     - name: Create a test HTML page
       copy:

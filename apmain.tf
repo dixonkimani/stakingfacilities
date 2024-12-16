@@ -168,8 +168,9 @@ resource "aws_instance" "ubuntu_vm" {
 #Copy the Ansible playbook into the VM and run it
 resource "null_resource" "copy_ansible_playbook" {
   provisioner "file" {
-    source      = "./apache1.yml"
-    destination = "/tmp/apache1.yml"  #Replace with preferred destination path if necessary
+    source      = "./apache1.yml"  #Replace with correct playbook path if necessary
+    destination = "/tmp/apache1.yml"
+
     connection {
       type        = "ssh"
       host        = aws_instance.ubuntu_vm.public_ip
@@ -180,7 +181,8 @@ resource "null_resource" "copy_ansible_playbook" {
 
   provisioner "remote-exec" {
     inline = [
-      "bash -c 'ansible-playbook /tmp/apache1.yml'" #Uses bash shell
+      "#!/bin/bash",
+      "ansible-playbook /tmp/apache1.yml"
     ]
 
     connection {
@@ -188,6 +190,7 @@ resource "null_resource" "copy_ansible_playbook" {
       host        = aws_instance.ubuntu_vm.public_ip
       user        = "ubuntu"
       private_key = "${file(var.ssh_key_priv)}"
+      #script_shell = "/bin/bash -e"
     }
   }
 }
