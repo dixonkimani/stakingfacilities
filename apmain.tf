@@ -134,7 +134,7 @@ resource "aws_network_interface" "internal_interface" {
 }
 
 
-# Create the VM as a EC2 Ubuntu instance and install Python and Ansible on it
+# Create the VM as EC2 Ubuntu instance
 resource "aws_instance" "ubuntu_vm" {
   ami                  = var.ami
   instance_type        = var.instance_type
@@ -163,10 +163,10 @@ resource "aws_eip" "external_ip" {
   depends_on = [aws_instance.ubuntu_vm]
 
   tags = {
-    Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
+    Name = "PublicEIP" #The public IP is auto-assigned as AWS elastic IP 
   }
   provisioner "local-exec" {
-    command = "sleep 60" # Add a delay to wait for the elastic IP to be allocated to the instance
+    command = "sleep 60" #Delay to wait for the elastic IP to be allocated to the instance
   }
 }
 
@@ -191,7 +191,7 @@ resource "null_resource" "install_python_ansible" {
   }
 }
 
-#Copy the Ansible playbook from host to the remote VM and run it on remote
+#Copy Ansible playbook from host to remote VM and run it
 resource "null_resource" "copy_ansible_playbook" {
   depends_on = [aws_eip.external_ip, null_resource.install_python_ansible]
 
