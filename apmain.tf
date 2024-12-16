@@ -149,12 +149,6 @@ resource "aws_instance" "ubuntu_vm" {
     device_index         = 1
   }
 
-  user_data = <<-EOF
-              #!/bin/bash
-              sudo apt-get update
-              sudo apt-get install -y python3 ansible
-              EOF
-
   tags = {
     Name = "Dickson-TestUbuntuVM"
   }
@@ -166,15 +160,37 @@ resource "aws_instance" "ubuntu_vm" {
 # Elastic IP for external interface
 resource "aws_eip" "external_ip" {
   network_interface = aws_network_interface.external_interface.id
-  #allocation_id = aws_eip.external_ip.id 
+  depends_on = [aws_instance.ubuntu_vm]
+
   tags = {
     Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
   }
 }
 
 
+#Install Python and Ansible on the VM
+resource "null_resource" "install_python_ansible" {
+  depends_on = [aws_instance.ubuntu_vm, aws_eip.external_ip]
+
+  provisioner "remote-exec" {
+    inline = [
+      "sudo apt update -y",
+      "sudo apt install -y ansible"
+    ]
+
+    connection {
+      type        = "ssh"
+      host        = aws_instance.ubuntu_vm.public_ip
+      user        = "ubuntu"
+      private_key = "${file(var.ssh_key_priv)}"
+    }
+  }
+}
+
 #Copy the Ansible playbook into the VM and run it
 resource "null_resource" "copy_ansible_playbook" {
+  depends_on = [aws_eip.external_ip, null_resource.install_python_ansible]
+
   provisioner "file" {
     source      = "./apache1.yml"  #Replace with correct playbook path if necessary
     destination = "/tmp/apache1.yml"
@@ -198,7 +214,6 @@ resource "null_resource" "copy_ansible_playbook" {
       host        = aws_instance.ubuntu_vm.public_ip
       user        = "ubuntu"
       private_key = "${file(var.ssh_key_priv)}"
-      #script_shell = "/bin/bash -e"
     }
   }
 }
