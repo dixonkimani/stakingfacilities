@@ -1,6 +1,6 @@
 # Staking Facilities Test Assignment
 
-#Summary:
+# Summary:
 This is a Terraform project that does the following:
 1. Creates a Ubuntu EC2 instance in AWS with 2 network interfaces and a public IP that is auto-assigned as a AWS elastic IP.
 2. Installs Python and Ansible on the instance. It is also possible to install Ansible locally and run the following steps on the remote Ec2 instance. But to avoid any issues caused by differing Python or Ansible configuration or settings, this project installs and runs Python and Ansible directly on the instance.
