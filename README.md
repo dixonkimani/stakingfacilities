@@ -20,10 +20,10 @@ This is a Terraform project that does the following:
 
 
 ## Steps to reproduce:
-1. Create a directory/ folder in your local machine and copy all the files in this repo into this directory.
+1. Create a directory/ folder in your local machine and copy all the files from this repo into this directory. It is important that all the project files are in the same directory.
 2. Copy your AWS private key file into the same directory.
-3. Open a terminal window and navigate to this directory.
-4. Use your preferred text editor to open and edit the terraform.tfvars file. The only values you **must** change are 'key_name' and 'ssh_key_priv' which are both the name of your AWS private key fileß. The rest of the values can be left as-is. Save and close the file.
+3. Open a terminal window and navigate into this directory.
+4. Use your preferred text editor to open and edit the terraform.tfvars file. The only values you **must** change are 'key_name' and 'ssh_key_priv' which are both the name of your AWS private key file. The rest of the values can be left as-is. Save and close the file.
 5. Initialize Terraform with this command in the terminal: **terraform init --upgrade** (Note that this will upgrade your Terraform installation to the latest version).
 6. Run the Terraform plan with this command in the terminal: **terraform plan**
 7. Execute the Terraform plan with this command in the terminal: **terraform apply**
