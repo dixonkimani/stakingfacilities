@@ -1,0 +1,45 @@
+---
+- name: Install Apache2 and create a simple local html test page
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Update the package cache
+      apt:
+        update_cache: yes
+
+    - name: Install the latest version of Apache
+      apt:
+        name: apache2
+        state: latest
+
+    - name: Enable and start Apache service
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Create a test HTML page
+      copy:
+        content: |
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <title>Dickson Kimani Assignment</title>
+          </head>
+          <body>
+              <h1>Dickson Kimani Assignment Page</h1>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+        owner: www-data
+        group: www-data
+        mode: '0644'
+
+    - name: Ensure proper permissions for the web directory
+      file:
+        path: /var/www/html
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+
