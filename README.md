@@ -1,4 +1,4 @@
-# Staking Facilities Test Assignment
+# Staking Facilities Assignment
 
 
 ## Summary:
