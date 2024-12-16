@@ -28,8 +28,7 @@ This is a Terraform project that does the following:
 6. Run the Terraform plan with this command in the terminal: **terraform plan**
 7. Execute the Terraform plan with this command in the terminal: **terraform apply**
    - If you prefer a non-interactive execution, use this command instead **terraform apply --auto-approve**
-8. Wait for Terraform to complete its run.
-   - Note: If you are rerunning this Terraform project immediately after running a previous 'terraform destroy' or 'terraform approve', the step named "Elastic IP for external interface" may fail and cause the project to stop. This is a known issue, caused when AWS does not de-allocate an old elastic IP from an old instance and rea-allocate it quickly enough. In this case, wait about 1 or 2 min for the old EC2 instance to be fully deprovisioned or the old IP to be deallocated (confirm it is actually by refreshing and viewing in the AWS console). Then you can rerun or continue the Terraform project once more with  the 'terraform apply' command.
+8. Wait for the Terraform project to complete its run.
 9. In your AWS account, a new EC2 instance has now been created. Check and copy the public IP of the created EC2 instance.
 10. In a browser window, enter **http://<public_ip>** or **https://<public_ip>** - of course replace '<public_ip>' with the actual IP from your instance. If using https, ignore the "Page is not secure" warning and proceed. The sample html test page named 'Dickson Kimani Assignment' is displayed.
 11. If no longer needed, you can undo or delete this setup using this Terraform command in the terminal: **terraform destroy --auto-approve**
