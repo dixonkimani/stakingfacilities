@@ -5,7 +5,7 @@
 This is a Terraform project that does the following:
 1. Creates a Ubuntu EC2 instance in AWS with 2 network interfaces and a public IP that is auto-assigned as a AWS elastic IP.
 2. Installs Python and Ansible on the instance.
-   - Note that it is also possible to install Ansible locally and run the following steps on the remote EC2 instance. But to avoid any issues caused by differing Python or Ansible configuration or settings, this project installs and runs Python and Ansible directly on the instance.
+   - Note that it is also possible to install Ansible locally and run the following steps on the remote EC2 instance. But to avoid any issues caused by different Python or Ansible configuration settings, this project directly installs and runs Python and Ansible on the remote instance.
 3. Calls/ executes an Ansible playbook that does the folllowing:
     - Installs Apache2 and creates an Apache webserver.
     - Starts the Apache service and configures it to listen on port 80
