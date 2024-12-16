@@ -4,23 +4,23 @@
 ## Summary:
 This is a Terraform project that does the following:
 1. Creates a Ubuntu EC2 instance in AWS with 2 network interfaces and a public IP that is auto-assigned as a AWS elastic IP.
-2. Installs Python and Ansible on the instance.
-   - Note that it is also possible to install Ansible locally and run the following steps on the remote EC2 instance. But to avoid any issues caused by different Python or Ansible configuration settings, this project directly installs and runs Python and Ansible on the remote instance.
-3. Calls/ executes an Ansible playbook that does the folllowing:
+2. Executes an Ansible playbook that does the following steps, all on the remote VM/ instance:
+    - Installs Python and Ansible on the instance.
+      - Note that it is also possible to install Ansible locally and run the following steps on the remote EC2 instance. But to avoid failures caused by host-specific Python or Ansible configuration settings on the Terraform host, this project directly installs Python and Ansible on the remote instance.
     - Installs Apache2 and creates an Apache webserver.
-    - Starts the Apache service and configures it to listen on port 80
-    - Creates a simple html testpage that is accessible on the public IP of the EC2 instance. 
+    - Starts the Apache service and configures it to listen on ports 80 and 443.
+    - Creates a simple html testpage that is accessible via the public IP of the EC2 instance. 
 
 
 ## Required:
 1. An AWS account with root privileges.
 2. A private key for your AWS account.
-3. Terraform installed locally on your instance/ machine (preferably Ubuntu) and [added to ENV/PATH](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+3. Terraform installed locally on your instance/ machine (preferably Ubuntu) and [added to the ENV/PATH](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 4. It is assumed that your AWS setup does not have any Network ACL rules that may conflict with this setup. For this reason, it may be best to use a brand-new test AWS account.
 
 
 ## Steps to reproduce:
-1. Create a directory/ folder in your local machine and copy all the files from this repo into this directory. It is important that all the project files are in the same directory.
+1. Create a directory in your local machine and copy all the files from this repo into this directory. It is important that all the project files are in the same directory.
 2. Copy your AWS private key file into the same directory.
 3. Open a terminal window and navigate into this directory.
 4. Use your preferred text editor to open and edit the terraform.tfvars file. The only values you **must** change are 'key_name' and 'ssh_key_priv' which are both the name of your AWS private key file. The rest of the values can be left as-is. Save and close the file.
