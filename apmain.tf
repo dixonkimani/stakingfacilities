@@ -166,31 +166,32 @@ resource "aws_eip" "external_ip" {
     Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
   }
   provisioner "local-exec" {
-    command = "sleep 120" # Add a delay of 120 seconds
+    command = "sleep 60" # Add a delay to wait for the elastic IP to be allocated to the instance
   }
 }
 
 
 #Install Python and Ansible on the VM
 resource "null_resource" "install_python_ansible" {
-  depends_on = [aws_instance.ubuntu_vm, aws_eip.external_ip]
+  depends_on = [aws_eip.external_ip]
 
   provisioner "remote-exec" {
     inline = [
-      "sudo apt update -y",
-      "sudo apt install -y ansible"
+      "sudo apt-get update -y",
+      "sudo apt-get install -y ansible"
     ]
 
     connection {
       type        = "ssh"
-      host        = aws_instance.ubuntu_vm.public_ip
+      host        = aws_eip.external_ip.public_ip
       user        = "ubuntu"
       private_key = "${file(var.ssh_key_priv)}"
+      timeout     = "2m"
     }
   }
 }
 
-#Copy the Ansible playbook into the VM and run it
+#Copy the Ansible playbook from host to the remote VM and run it on remote
 resource "null_resource" "copy_ansible_playbook" {
   depends_on = [aws_eip.external_ip, null_resource.install_python_ansible]
 
@@ -200,9 +201,10 @@ resource "null_resource" "copy_ansible_playbook" {
 
     connection {
       type        = "ssh"
-      host        = aws_instance.ubuntu_vm.public_ip
+      host        = aws_eip.external_ip.public_ip
       user        = "ubuntu"
       private_key = "${file(var.ssh_key_priv)}"
+      timeout     = "2m"
     }
   }
 
@@ -214,9 +216,10 @@ resource "null_resource" "copy_ansible_playbook" {
 
     connection {
       type        = "ssh"
-      host        = aws_instance.ubuntu_vm.public_ip
+      host        = aws_eip.external_ip.public_ip
       user        = "ubuntu"
       private_key = "${file(var.ssh_key_priv)}"
+      timeout     = "2m"
     }
   }
 }
