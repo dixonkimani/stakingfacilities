@@ -168,8 +168,8 @@ resource "aws_instance" "ubuntu_vm" {
 #Copy the Ansible playbook into the VM and run it
 resource "null_resource" "copy_ansible_playbook" {
   provisioner "file" {
-    source      = "./apache1.yml"  #Replace with preferred playbook path if necessary
-    destination = "/tmp/apache1.yml"
+    source      = "./apache1.yml"
+    destination = "/tmp/apache1.yml"  #Replace with preferred destination path if necessary
     connection {
       type        = "ssh"
       host        = aws_instance.ubuntu_vm.public_ip
