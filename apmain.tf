@@ -165,6 +165,9 @@ resource "aws_eip" "external_ip" {
   tags = {
     Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
   }
+  provisioner "local-exec" {
+    command = "sleep 120" # Add a delay of 120 seconds
+  }
 }
 
 
