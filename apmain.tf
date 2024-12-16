@@ -182,7 +182,7 @@ resource "null_resource" "copy_ansible_playbook" {
   provisioner "remote-exec" {
     inline = [
       "#!/bin/bash",
-      "ansible-playbook /tmp/apache1.yml"
+      "sudo ansible-playbook /tmp/apache1.yml"
     ]
 
     connection {
