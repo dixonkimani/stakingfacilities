@@ -153,8 +153,8 @@ resource "aws_instance" "ubuntu_vm" {
 
   user_data = <<-EOF
               #!/bin/bash
-              apt-get update
-              apt-get install -y python3 ansible
+              sudo apt-get update
+              sudo apt-get install -y python3 ansible
               EOF
 
   tags = {
