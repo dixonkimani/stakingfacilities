@@ -11,7 +11,7 @@
     - name: Install Apache
       shell: |
         #!/bin/bash
-        sudo apt-get install apache2 -y
+        sudo apt-get install apache2 openssl ssl-cert -y
 
     - name: Ensure Apache is enabled and running
       shell: |
@@ -19,6 +19,38 @@
         sudo systemctl enable apache2
         sudo systemctl start apache2
 
+    - name: Enable SSL module and site
+      shell: |
+        sudo a2enmod ssl
+        sudo a2ensite default-ssl.conf
+        sudo systemctl reload apache2
+
+    - name: Create a self-signed SSL certificate
+      shell: |
+        sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+          -keyout /etc/ssl/private/apache-selfsigned.key \
+          -out /etc/ssl/certs/apache-selfsigned.crt \
+          -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=localhost"
+
+    - name: Update the SSL configuration to use the self-signed certificate
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: "^(\\s*SSLCertificateFile)"
+        line: "        SSLCertificateFile /etc/ssl/certs/apache-selfsigned.crt"
+      #notify: Restart Apache
+
+    - name: Update the SSL configuration to use the private key
+      lineinfile:
+        path: /etc/apache2/sites-available/default-ssl.conf
+        regexp: "^(\\s*SSLCertificateKeyFile)"
+        line: "        SSLCertificateKeyFile /etc/ssl/private/apache-selfsigned.key"
+      #notify: Restart Apache
+
+    - name: Restart Apache
+      shell: |
+        #!/bin/bash
+        sudo systemctl restart apache2
+       
     - name: Create a test HTML page
       copy:
         content: |

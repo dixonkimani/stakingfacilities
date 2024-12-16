@@ -79,6 +79,13 @@ resource "aws_security_group" "external_sg" {
     cidr_blocks = ["0.0.0.0/0"]  # To allow HTTP traffic from anywhere
   }
 
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # To allow HTTPS traffic from anywhere
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -126,15 +133,6 @@ resource "aws_network_interface" "internal_interface" {
   }
 }
 
-# Elastic IP for external interface
-resource "aws_eip" "external_ip" {
-  network_interface = aws_network_interface.external_interface.id
-  #allocation_id = aws_eip.external_ip.id 
-  tags = {
-    Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
-  }
-}
-
 
 # Create the VM as a EC2 Ubuntu instance and install Python and Ansible on it
 resource "aws_instance" "ubuntu_vm" {
@@ -162,6 +160,16 @@ resource "aws_instance" "ubuntu_vm" {
   }
 
   depends_on = [aws_network_interface.external_interface, aws_network_interface.internal_interface]
+}
+
+
+# Elastic IP for external interface
+resource "aws_eip" "external_ip" {
+  network_interface = aws_network_interface.external_interface.id
+  #allocation_id = aws_eip.external_ip.id 
+  tags = {
+    Name = "PublicEIP" #The public IP is auto-assigned as an AWS elastic IP 
+  }
 }
 
 
